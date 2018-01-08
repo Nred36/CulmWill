@@ -13,10 +13,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.geom.Arc2D;
 import java.io.BufferedReader;
 import java.io.FileReader;
-import javafx.scene.shape.Arc;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -30,22 +28,27 @@ public class CulmWill extends JPanel implements ActionListener, KeyListener {
     Timer frame;
     boolean press[] = {false, false};
     double pos = 0;
-    int score = 0;
+    int score = 0, bullx, bully;
 
     public CulmWill() {//program name      
-        frame = new Timer(1, this); //sets the delay between frames
+        frame = new Timer(30, this); //sets the delay between frames
         frame.start();
 
-        Timer count = new Timer(1000, new ActionListener() {
+        Timer count = new Timer(30, new ActionListener() { // this will run the code inside ever 30ms
             @Override
-            public void actionPerformed(ActionEvent e) { //runs every second                
+            public void actionPerformed(ActionEvent e) {
                 score++;
+                if (bullx <= 0 || bullx > 800 || bully <= 0 || bully > 600) { //if its off screen
+                    score = 0;
+                    bullx = 400; //spawn a new one
+                    bully = 400;
+                }
             }
         });
 
-        count.start();
+        count.start(); //starts the timer
 
-        addKeyListener(this);
+        addKeyListener(this); //checks if keys are pressed
     }
 
     public void spawn() {
@@ -58,40 +61,40 @@ public class CulmWill extends JPanel implements ActionListener, KeyListener {
         f.setResizable(false);
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.add(panel);
-        f.setUndecorated(true); //Takes away the toolBar
-        f.setSize(700, 400);
+        //f.setUndecorated(true); //Takes away the toolBar
+        f.setSize(800, 600);
         f.setVisible(true);
         f.setLocationRelativeTo(null);
 
     }
 
-    public void paint(Graphics g) { //Static
+    public void paint(Graphics g) { //double buffer
         dbImage = createImage(getWidth(), getHeight());
         dbg = dbImage.getGraphics();
-        dbg.drawImage(new ImageIcon("Special-Stage-Sonic-the-Hedgehog-2-2013.png").getImage(), 0, 0, 700, 400, this);
-        dbg.drawArc(50, -180, 600, 500, 0, -180);
         paintComponent(dbg);
+
         g.drawImage(dbImage, 0, 0, this);
+
         g.setFont(new Font("Consolas", Font.PLAIN, 20));
         g.drawString("SCORE: " + score, 300, 30);
     }
 
-    public void paintComponent(Graphics g) { //Rotates        
+    public void paintComponent(Graphics g) {
         guy = (Graphics2D) g;
         guy.drawRect(350, 140, 1, 1);
-        guy.rotate(pos, 350, 140);
 
-        //guy.drawImage(new ImageIcon("man.jpg").getImage(), 250, 200, 200, 300, this);       
-        guy.drawRect(250, 200, 200, 300);
-        
-        Arc a = new Arc(50, -180, 600, 500, 0, -180);
-        if(!a.intersects(250, 200, 200, 300)){
-            System.out.println("22");
-        }
-        
+        guy.rotate(pos, 400, 0); //all the code below will rotate
+        guy.drawImage(new ImageIcon("back.jpg").getImage(), -800, -600, 1600, 1600, this);
+        bullx -= score / 16;
+        bully -= score / 16;
+        guy.fillOval(bullx - 10, bully - 10, 20 + (score * score) / 16, 20 + (score * score) / 16);
+
+        guy.rotate(-pos, 400, 0); //all the code below wont rotate
+        guy.drawImage(new ImageIcon("man.jpg").getImage(), 350, 300, 100, 150, this);
+        guy.drawRect(350, 300, 100, 150);
         super.paintComponents(g);
 
-        if (press[0] == true) {
+        if (press[0] == true) { //checks which key is being pressed
             pos += .02;
         } else if (press[1] == true) {
             pos -= .02;
