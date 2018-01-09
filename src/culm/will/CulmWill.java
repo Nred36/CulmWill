@@ -93,7 +93,7 @@ public class CulmWill extends JPanel implements ActionListener, KeyListener {
         guy.drawImage(new ImageIcon("man.jpg").getImage(), 350, 300, 100, 150, this);
         guy.drawRect(350, 300, 100, 150);
         
-        guy.fillOval(Math.cos(pos-(Math.PI/2))*400-5,Math.sin(pos-(Math.PI/2))*400-5,10,10);
+        guy.fillOval((int)(Math.cos(pos-(Math.PI/2))*400)-5,(int)(Math.sin(pos-(Math.PI/2))*400)-5,10,10);
         super.paintComponents(g);
 
         if (press[0] == true) { //checks which key is being pressed
