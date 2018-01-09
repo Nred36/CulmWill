@@ -42,8 +42,6 @@ public class CulmWill extends JPanel implements ActionListener, KeyListener {
                     score = 0;
                     bullx = (int) (Math.sin(pos) * 400 + 400); //spawn a new one
                     bully = (int) (Math.cos(pos) * 400);
-                    System.out.println(pos);
-                    // guy.fillOval((int) (Math.cos(pos + (Math.PI / 2))) + 395, (int) (Math.sin(pos + (Math.PI / 2))*400) - 5
                 }
             }
         });
@@ -88,16 +86,14 @@ public class CulmWill extends JPanel implements ActionListener, KeyListener {
         guy.rotate(pos, 400, 0); //all the code below will rotate
         guy.drawImage(new ImageIcon("back.jpg").getImage(), -800, -600, 1600, 1600, this);
         guy.drawImage(new ImageIcon("airplane.png").getImage(), bullx - (20 + (score * score) / 16) / 2, bully - (20 + (score * score) / 16) / 2, 20 + (score * score) / 16, 20 + (score * score) / 16, this);
-        //guy.fillOval((int) (Math.cos(pos + (Math.PI / 2))) + 395, (int) (Math.sin(pos + (Math.PI / 2))*400) - 5, 10, 10);
 
         guy.rotate(-pos, 400, 0); //all the code below wont rotate
         guy.drawImage(new ImageIcon("man.jpg").getImage(), 350, 300, 100, 150, this);
-        guy.drawRect(350, 300, 100, 150);
 
         guy.drawLine(400, 0, (int) (Math.cos(-0.15 + (Math.PI / 2)) * 800) + 400, (int) (Math.sin(-0.15 + (Math.PI / 2)) * 800));
         guy.drawLine(400, 0, (int) (Math.cos(0.15 + (Math.PI / 2)) * 800) + 400, (int) (Math.sin(0.15 + (Math.PI / 2)) * 800));
 
-        guy.drawRect((int) (Math.cos(pos + (Math.PI / 2)) * 400) + 400, (int) (Math.sin(pos + (Math.PI / 2)) * 400), 30, 30);
+        //guy.drawRect((int) (Math.cos(pos + (Math.PI / 2)) * 400) + 400, (int) (Math.sin(pos + (Math.PI / 2)) * 400), 30, 30);
 
         super.paintComponents(g);
 
