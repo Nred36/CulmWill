@@ -26,7 +26,7 @@ public class CulmWill extends JPanel implements ActionListener, KeyListener {
     Graphics2D dr, guy;
     Image dbImage, master;
     Timer frame;
-    boolean press[] = {false, false};
+    boolean press[] = {false, false, false, false};
     double pos = 0;
     int score = 0, bullx, bully;
 
@@ -38,10 +38,12 @@ public class CulmWill extends JPanel implements ActionListener, KeyListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 score++;
-                if (bullx <= 0 || bullx > 800 || bully <= 0 || bully > 600) { //if its off screen
+                if (bullx == 0 || score == 150) { //if its off screen
                     score = 0;
-                    bullx = 400; //spawn a new one
-                    bully = 400;
+                    bullx = (int) (Math.sin(pos) * 400 + 400); //spawn a new one
+                    bully = (int) (Math.cos(pos) * 400);
+                    System.out.println(pos);
+                    // guy.fillOval((int) (Math.cos(pos + (Math.PI / 2))) + 395, (int) (Math.sin(pos + (Math.PI / 2))*400) - 5
                 }
             }
         });
@@ -85,21 +87,30 @@ public class CulmWill extends JPanel implements ActionListener, KeyListener {
 
         guy.rotate(pos, 400, 0); //all the code below will rotate
         guy.drawImage(new ImageIcon("back.jpg").getImage(), -800, -600, 1600, 1600, this);
-        bullx -= score / 16;
-        bully -= score / 16;
-        guy.fillOval(bullx - 10, bully - 10, 20 + (score * score) / 16, 20 + (score * score) / 16);
+        guy.drawImage(new ImageIcon("airplane.png").getImage(), bullx - (20 + (score * score) / 16) / 2, bully - (20 + (score * score) / 16) / 2, 20 + (score * score) / 16, 20 + (score * score) / 16, this);
+        //guy.fillOval((int) (Math.cos(pos + (Math.PI / 2))) + 395, (int) (Math.sin(pos + (Math.PI / 2))*400) - 5, 10, 10);
 
         guy.rotate(-pos, 400, 0); //all the code below wont rotate
         guy.drawImage(new ImageIcon("man.jpg").getImage(), 350, 300, 100, 150, this);
         guy.drawRect(350, 300, 100, 150);
-        
-        guy.fillOval((int)(Math.cos(pos-(Math.PI/2))*400)-5,(int)(Math.sin(pos-(Math.PI/2))*400)-5,10,10);
+
+        guy.drawLine(400, 0, (int) (Math.cos(-0.15 + (Math.PI / 2)) * 800) + 400, (int) (Math.sin(-0.15 + (Math.PI / 2)) * 800));
+        guy.drawLine(400, 0, (int) (Math.cos(0.15 + (Math.PI / 2)) * 800) + 400, (int) (Math.sin(0.15 + (Math.PI / 2)) * 800));
+
+        guy.drawRect((int) (Math.cos(pos + (Math.PI / 2)) * 400) + 400, (int) (Math.sin(pos + (Math.PI / 2)) * 400), 30, 30);
+
         super.paintComponents(g);
 
         if (press[0] == true) { //checks which key is being pressed
-            pos += .02;
+            pos -= .02; //moves left
         } else if (press[1] == true) {
-            pos -= .02;
+            pos += .02; //moves right
+        }
+
+        if (press[2] == true) { //checks which key is being pressed
+            //shoot
+        } else if (press[3] == true) {
+            //power
         }
     }
 
@@ -114,6 +125,10 @@ public class CulmWill extends JPanel implements ActionListener, KeyListener {
             press[0] = true;
         } else if (e.getKeyCode() == KeyEvent.VK_D || e.getKeyCode() == KeyEvent.VK_RIGHT) {
             press[1] = true;
+        } else if (e.getKeyCode() == KeyEvent.VK_W || e.getKeyCode() == KeyEvent.VK_UP) {
+            press[2] = true;
+        } else if (e.getKeyCode() == KeyEvent.VK_S || e.getKeyCode() == KeyEvent.VK_DOWN) {
+            press[3] = true;
         }
     }
 
@@ -123,6 +138,10 @@ public class CulmWill extends JPanel implements ActionListener, KeyListener {
             press[0] = false;
         } else if (e.getKeyCode() == KeyEvent.VK_D || e.getKeyCode() == KeyEvent.VK_RIGHT) {
             press[1] = false;
+        } else if (e.getKeyCode() == KeyEvent.VK_W || e.getKeyCode() == KeyEvent.VK_UP) {
+            press[2] = true;
+        } else if (e.getKeyCode() == KeyEvent.VK_S || e.getKeyCode() == KeyEvent.VK_DOWN) {
+            press[3] = true;
         }
 
     }
